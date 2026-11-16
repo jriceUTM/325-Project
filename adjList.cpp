@@ -32,14 +32,14 @@ public:
         adjList[dest].push_back(e2);
     }
 
-    unordered_map<string, vector<Edge>> getAdjList() {
+    const unordered_map<string, vector<Edge>>& getAdjList() const {
         return adjList;
-    }
+    }   
 
     void printGraph() {
         for (auto it = adjList.begin(); it != adjList.end(); it++) {
             cout << it->first << " -> ";
-            for (int i = 0; i < it->second.size(); i++) {
+            for (size_t i = 0; i < it->second.size(); i++) {
                 cout << "[" << it->second[i].dest << " (" << it->second[i].weight << "ms)] ";
             }
             cout << endl;
