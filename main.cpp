@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <queue>
 #include <unordered_map>
 #include <limits>
@@ -39,6 +40,7 @@ int main()
         if (!(cin >> choice)) {
             cout << "Invalid choice. Enter 1, 2, or 3." << endl;
             cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             continue;
         }
 
