@@ -17,7 +17,85 @@ vector<string> dijkstra(
 
 int main()
 {
+    Graph graph;
+    graph.addEdge("R1", "R2", 4);
+    graph.addEdge("R1", "R3", 2);
+    graph.addEdge("R2", "R3", 1);
+    graph.addEdge("R2", "R4", 5);
+    graph.addEdge("R3", "R4", 8);
+    graph.addEdge("R3", "R5", 10);
+    graph.addEdge("R4", "R5", 2);
 
+    int choice = 0;
+
+    while (true) {
+        cout << endl;
+        cout << "Network Routing Simulator" << endl;
+        cout << "1. View Network" << endl;
+        cout << "2. Send Packet" << endl;
+        cout << "3. Exit" << endl;
+        cout << "Enter choice: ";
+
+        if (!(cin >> choice)) {
+            cout << "Invalid choice. Enter 1, 2, or 3." << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            continue;
+        }
+
+        if (choice == 1) {
+            graph.printGraph();
+        }
+        else if (choice == 2) {
+            string source;
+            string destination;
+
+            cout << "Source router: ";
+            cin >> source;
+            cout << "Destination router: ";
+            cin >> destination;
+
+            const auto& adjList = graph.getAdjList();
+            if (!adjList.count(source) || !adjList.count(destination)) {
+                cout << "Invalid router. Use a router that exists in the network." << endl;
+                continue;
+            }
+
+            vector<string> path = dijkstra(graph, source, destination);
+            if (path.empty()) {
+                cout << "No route found between those routers." << endl;
+                continue;
+            }
+
+            cout << "Shortest path: ";
+            for (size_t i = 0; i < path.size(); i++) {
+                cout << path[i];
+                if (i + 1 < path.size()) {
+                    cout << " -> ";
+                }
+            }
+            cout << endl;
+
+            int latency = 0;
+            for (size_t i = 0; i + 1 < path.size(); i++) {
+                for (const Edge& edge : adjList.at(path[i])) {
+                    if (edge.dest == path[i + 1]) {
+                        latency += edge.weight;
+                        break;
+                    }
+                }
+            }
+
+            cout << "Total latency: " << latency << "ms" << endl;
+        }
+        else if (choice == 3) {
+            cout << "Goodbye." << endl;
+            break;
+        }
+        else {
+            cout << "Invalid choice. Enter 1, 2, or 3." << endl;
+        }
+    }
 
     return 0;
 }
@@ -98,4 +176,3 @@ vector<string> dijkstra(const Graph& graph,
 
     return path;
 }
-
